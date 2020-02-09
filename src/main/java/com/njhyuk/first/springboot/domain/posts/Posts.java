@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-class Posts {
+public class Posts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
