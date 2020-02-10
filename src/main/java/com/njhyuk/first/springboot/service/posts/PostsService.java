@@ -1,7 +1,9 @@
 package com.njhyuk.first.springboot.service.posts;
 
 import com.njhyuk.first.springboot.domain.posts.PostRepository;
+import com.njhyuk.first.springboot.domain.posts.Posts;
 import com.njhyuk.first.springboot.web.dto.PostsSaveRequestDto;
+import com.njhyuk.first.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,15 @@ public class PostsService {
         return postRepository
                 .save(requestDto.toEntity())
                 .getId();
+    }
+
+    @Transactional
+    public Long update(Long id, PostsUpdateRequestDto requestDto) {
+        Posts posts = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다."));
+
+        posts.update(requestDto.getTitle(), requestDto.getContent());
+
+        return id;
     }
 }
