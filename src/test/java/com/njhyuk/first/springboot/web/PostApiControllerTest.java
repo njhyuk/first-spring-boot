@@ -1,6 +1,6 @@
 package com.njhyuk.first.springboot.web;
 
-import com.njhyuk.first.springboot.domain.posts.PostRepository;
+import com.njhyuk.first.springboot.domain.posts.PostsRepository;
 import com.njhyuk.first.springboot.domain.posts.Posts;
 import com.njhyuk.first.springboot.web.dto.PostsSaveRequestDto;
 import com.njhyuk.first.springboot.web.dto.PostsUpdateRequestDto;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,7 +32,7 @@ public class PostApiControllerTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private PostRepository postRepository;
+    private PostsRepository postsRepository;
 
     @Test
     public void Posts_will_be_registered() {
@@ -58,7 +57,7 @@ public class PostApiControllerTest {
         assertThat(responseEntity.getBody())
                 .isGreaterThan(0L);
 
-        List<Posts> all = postRepository.findAll();
+        List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getTitle())
                 .isEqualTo(title);
         assertThat(all.get(0).getContent())
@@ -68,7 +67,7 @@ public class PostApiControllerTest {
     @Test
     public void Posts_will_be_updated() {
         //given
-        Posts savedPosts = postRepository.save(Posts.builder()
+        Posts savedPosts = postsRepository.save(Posts.builder()
                 .title("title")
                 .content("content")
                 .author("author")
@@ -101,7 +100,7 @@ public class PostApiControllerTest {
         assertThat(responseEntity.getBody())
                 .isGreaterThan(0L);
 
-        List<Posts> all = postRepository.findAll();
+        List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getTitle())
                 .isEqualTo(expectedTitle);
         assertThat(all.get(0).getContent())
@@ -111,7 +110,7 @@ public class PostApiControllerTest {
     @Test
     public void Posts_will_be_deleted() {
         //given
-        Posts savedPosts = postRepository.save(Posts.builder()
+        Posts savedPosts = postsRepository.save(Posts.builder()
                 .title("title")
                 .content("content")
                 .author("author")
@@ -123,7 +122,7 @@ public class PostApiControllerTest {
 
         //when
         restTemplate.delete(url);
-        Optional<Posts> entity = postRepository.findById(deleteId);
+        Optional<Posts> entity = postsRepository.findById(deleteId);
 
         //then
         assertThat(entity)

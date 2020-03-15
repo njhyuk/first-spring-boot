@@ -1,30 +1,40 @@
 package com.njhyuk.first.springboot.service.posts;
 
-import com.njhyuk.first.springboot.domain.posts.PostRepository;
+import com.njhyuk.first.springboot.domain.posts.PostsRepository;
 import com.njhyuk.first.springboot.domain.posts.Posts;
+import com.njhyuk.first.springboot.web.dto.PostsListResponseDto;
 import com.njhyuk.first.springboot.web.dto.PostsResponseDto;
 import com.njhyuk.first.springboot.web.dto.PostsSaveRequestDto;
 import com.njhyuk.first.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class PostsService {
-    private final PostRepository postRepository;
+    private final PostsRepository postsRepository;
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto) {
-        return postRepository
+        return postsRepository
                 .save(requestDto.toEntity())
                 .getId();
     }
 
     @Transactional
     public Long update(Long id, PostsUpdateRequestDto requestDto) {
-        Posts posts = postRepository.findById(id)
+        Posts posts = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
 
         posts.update(requestDto.getTitle(), requestDto.getContent());
@@ -34,15 +44,15 @@ public class PostsService {
 
     @Transactional
     public void delete(Long id) {
-        Posts entity = postRepository.findById(id)
+        Posts entity = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
 
-        postRepository.delete(entity);
+        postsRepository.delete(entity);
     }
 
     @Transactional
     public PostsResponseDto findById(Long id) {
-        Posts entity = postRepository.findById(id)
+        Posts entity = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
 
         return new PostsResponseDto(entity);
