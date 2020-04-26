@@ -23,7 +23,7 @@ cp $REPOSITORY/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
-CURRENT_PID=$(pgrep -f ${PROJECT_NAME}*.jar)
+CURRENT_PID=$(pgrep -fl first-springboot | grep jar | awk '{print $1}')
 
 echo "> 현재 구동중인 애플리케이션 pid : $CURRENT_PID"
 
@@ -41,7 +41,13 @@ JAR_NAME=$(ls -tr $REPOSITORY/ | grep *.jar | tail -n 1)
 
 echo "> JAR_NAME : $JAR_NAME"
 
+echo "$JAR_NAME 에 권한 추가"
+
+chmod +x $JAR_NAME
+
+echo "$JAR_NAME 실행"
+
 nohup java -jar \
   -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-oauth.properties \
   -Dspring.profiles.active=real \
-  $REPOSITORY/$JAR_NAME 2>&1 &
+  $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
