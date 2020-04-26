@@ -6,9 +6,12 @@ import com.njhyuk.first.springboot.domain.posts.PostsRepository;
 import com.njhyuk.first.springboot.domain.posts.Posts;
 import com.njhyuk.first.springboot.web.dto.PostsSaveRequestDto;
 import com.njhyuk.first.springboot.web.dto.PostsUpdateRequestDto;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -28,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PostApiControllerTest {
 
     @LocalServerPort
@@ -52,6 +56,11 @@ public class PostApiControllerTest {
                 .build();
     }
 
+    @After
+    public void tearDown() throws Exception {
+        postsRepository.deleteAll();
+    }
+
     @Test
     @WithMockUser(roles="USER")
     public void Posts_will_be_registered() throws Exception {
@@ -65,7 +74,7 @@ public class PostApiControllerTest {
                 .author("author")
                 .build();
 
-        String url = "http://localhost:" + port + "api/v1/posts";
+        String url = "http://localhost:" + port + "/api/v1/posts";
 
         //when
         mvc.perform(post(url)
