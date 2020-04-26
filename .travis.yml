@@ -26,8 +26,8 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
-    bucket: njhyuk-first-springboot-build
-    region: ap-northeast-2
+    bucket: njhyuk-first-springboot-build-s3
+    region: us-east-2
     skip_cleanup: true
     acl: private
     local_dir: deploy
@@ -36,7 +36,7 @@ deploy:
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
-    bucket: njhyuk-first-springboot-build
+    bucket: njhyuk-first-springboot-build-s3
     key: first-springboot.zip
     bundle_type: zip
     application: first-springboot
