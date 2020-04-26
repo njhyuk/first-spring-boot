@@ -41,7 +41,7 @@ deploy:
     bundle_type: zip
     application: first-springboot
     deployment_group: first-springboot-group
-    region: ap-northeast-2
+    region: us-east-2
     wait-until-deployed: true
 
 notifications:
