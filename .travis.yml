@@ -40,7 +40,7 @@ deploy:
     region: ap-northeast-2
     wait-until-deployed: true
 
-  notifications:
-    email:
-      recipients:
-        - njh2239@gmail.com
+notifications:
+  email:
+    recipients:
+      - njh2239@gmail.com
